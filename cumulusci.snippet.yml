@@ -1,0 +1,8 @@
+tasks:
+  resolve_dependencies:
+    description: Transfers cci dependencies to sfdx-project.json
+    class_path: tasks.ResolveDependencies
+
+  set_default:
+    description: Changes the default directory. Pass in directory with -o
+    class_path: tasks.SetDefault

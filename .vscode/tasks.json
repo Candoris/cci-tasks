@@ -1,0 +1,33 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Resolve Dependencies",
+            "type": "shell",
+            "command": "cci task run resolve_dependencies --org ${input:org}",
+            "problemMatcher": []
+        },
+        {
+            "label": "Set Default Directory",
+            "type": "shell",
+            "command": "cci task run set_default --org ${input:org} -o dir ${input:dir}",
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "org",
+            "type": "promptString",
+            "default": "dev",
+            "description": "Scratch org"
+        },
+        {
+            "id": "dir",
+            "type": "promptString",
+            "default": "force-app",
+            "description": "Directory to make default"
+        }
+    ]
+}
