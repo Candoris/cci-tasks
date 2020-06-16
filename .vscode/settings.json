@@ -1,0 +1,10 @@
+{
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#3F262D",
+        "titleBar.activeBackground": "#58363F",
+        "titleBar.activeForeground": "#FCFAFA"
+    },
+    "yaml": {
+        "schemaStore": "enable"
+    }
+}

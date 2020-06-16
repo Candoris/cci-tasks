@@ -6,13 +6,13 @@
         {
             "label": "Resolve Dependencies",
             "type": "shell",
-            "command": "cci task run resolve_dependencies --org ${input:org}",
+            "command": "cci task run cci-tasks:resolve_dependencies --org ${input:org}",
             "problemMatcher": []
         },
         {
             "label": "Set Default Directory",
             "type": "shell",
-            "command": "cci task run set_default --org ${input:org} -o dir ${input:dir}",
+            "command": "cci task run cci-tasks:set_default --org ${input:org} -o dir ${input:dir}",
             "problemMatcher": []
         }
     ],
