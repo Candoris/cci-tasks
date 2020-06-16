@@ -17,6 +17,8 @@ sources:
         github: https://github.com/Candoris/cci-tasks
 ```
 
+2. Copy tasks directory into into your target cci project
+
 ## Executing tasks through vscode
 
 1. Merge tasks.json from this repository into your target cci project
