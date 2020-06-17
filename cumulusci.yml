@@ -9,7 +9,7 @@ project:
 sources:
   npsp:
     github: https://github.com/SalesforceFoundation/NPSP
-    tag: rel/3.178
+    release: latest
 
 tasks:
   resolve_dependencies:
@@ -28,3 +28,10 @@ tasks:
       apex: >
         npsp__Customizable_Rollup_Settings__c crlpSettings = npsp__Customizable_Rollup_Settings__c.getOrgDefaults();
         upsert crlpSettings;
+
+  npsp_custom_config:
+    description: Post install metadata for NNPSP
+    class_path: cumulusci.tasks.salesforce.Deploy
+    group: Salesforce Metadata
+    options:
+      path: unpackaged/npsp/custom_config

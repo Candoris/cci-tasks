@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StandardValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sorted>false</sorted>
+    <standardValue>
+        <fullName>Individual</fullName>
+        <default>false</default>
+        <label>Individual</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Household</fullName>
+        <default>false</default>
+        <label>Household</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Corporate</fullName>
+        <default>false</default>
+        <label>Corporate</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Government</fullName>
+        <default>false</default>
+        <label>Government</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Nonprofit</fullName>
+        <default>false</default>
+        <label>Nonprofit</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Foundation</fullName>
+        <default>false</default>
+        <label>Foundation</label>
+    </standardValue>
+</StandardValueSet>
