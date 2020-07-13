@@ -35,3 +35,54 @@ tasks:
     group: Salesforce Metadata
     options:
       path: unpackaged/npsp/custom_config
+
+  generate_test_data:
+    description: Creates a new set of test data; overwrites existing data file.
+    class_path: tasks.data.CreateTestData
+    group: Test Data
+    options:
+      sql_path: datasets/dev_org/test_data.sql
+
+  test_data_dev_org:
+    description: Loads a test data set for most NPSP objects based on 100 Contacts that should fit into a scratch org or DE org.
+    class_path: cumulusci.tasks.bulkdata.LoadData
+    group: Test Data
+    options:
+      sql_path: datasets/dev_org/test_data.sql
+      mapping: datasets/mapping.yml
+      ignore_row_errors: true
+
+  test_data_delete:
+    description: Deletes all data in the objects specified in the objects option.
+    class_path: cumulusci.tasks.bulkdata.DeleteData
+    group: Test Data
+    options:
+      objects:
+        - npsp__Allocation__c
+        - OpportunityContactRole
+        - Opportunity
+        - npe03__Recurring_Donation__c
+        - Case
+        - npsp__General_Accounting_Unit__c
+        - Campaign
+        - CampaignMember
+        - npsp__Address__c
+        - Contact
+        - Account
+
+    dx_install_historical_transactions_authorize:
+      description: Install Historical Transactions unmanaged package from CANDTECH Org
+      class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+      options:
+        command: force:package:install
+        extra: -p 04tj0000001acCZ --noprompt --wait 300
+
+flows:
+  import_test_data:
+    steps:
+      1:
+        task: test_data_delete
+      2:
+        task: generate_test_data
+      3:
+        task: test_data_dev_org

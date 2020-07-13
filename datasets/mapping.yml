@@ -1,0 +1,147 @@
+Account:
+    sf_object: Account
+    table: Account
+    fields:
+        Name: Name
+        Type: Type
+        BillingStreet: BillingStreet
+        BillingCity: BillingCity
+        BillingState: BillingState
+        BillingPostalCode: BillingPostalCode
+        BillingCountry: BillingCountry
+        ShippingStreet: ShippingStreet
+        ShippingCity: ShippingCity
+        ShippingState: ShippingState
+        ShippingPostalCode: ShippingPostalCode
+        ShippingCountry: ShippingCountry
+        npo02__HouseholdPhone__c: HouseholdPhone
+        npe01__SYSTEM_AccountType__c: AccountType
+Contact:
+    sf_object: Contact
+    table: Contact
+    fields:
+        FirstName: FirstName
+        LastName: LastName
+        npsp__Deceased__c: Deceased
+        npsp__Do_Not_Contact__c: DoNotContact
+        npe01__PreferredPhone__c: PreferredPhone
+        npe01__Preferred_Email__c: PreferredEmail
+        HomePhone: HomePhone
+        MobilePhone: MobilePhone
+        npe01__WorkPhone__c: WorkPhone
+        npe01__HomeEmail__c: PersonalEmail
+        npe01__WorkEmail__c: WorkEmail
+    lookups:
+        AccountId:
+            table: Account
+        npsp__Primary_Affiliation__c:
+            table: Account
+# Address__c:
+#     sf_object: npsp__Address__c
+#     table: Address__c
+#     fields:
+#         npsp__MailingCountry__c: MailingCountry__c
+#         npsp__MailingStreet__c: MailingStreet__c
+#         npsp__MailingState__c: MailingState__c
+#         npsp__MailingCity__c: MailingCity__c
+#         npsp__MailingPostalCode__c: MailingPostalCode__c
+#         npsp__Seasonal_Start_Month__c: Seasonal_Start_Month__c
+#         npsp__Seasonal_Start_Day__c: Seasonal_Start_Day__c
+#         npsp__Seasonal_End_Month__c: Seasonal_End_Month__c
+#         npsp__Seasonal_End_Day__c: Seasonal_End_Day__c
+#     lookups:
+#         npsp__Household_Account__c:
+#             table: Account
+# Campaign:
+#     sf_object: Campaign
+#     table: Campaign
+#     fields:
+#         Name: name
+# npe03__Recurring_Donation__c:
+#     sf_object: npe03__Recurring_Donation__c
+#     table: npe03__Recurring_Donation__c
+#     fields:
+#         Name: Name
+#         npe03__Amount__c: npe03__Amount__c
+#         npe03__Date_Established__c: npe03__Date_Established__c
+#         npe03__Schedule_Type__c: npe03__Schedule_Type__c
+#         npe03__Open_Ended_Status__c: npe03__Open_Ended_Status__c
+#         npe03__Last_Payment_Date__c: npe03__Last_Payment_Date__c
+#         npe03__Next_Payment_Date__c: npe03__Next_Payment_Date__c
+#         npe03__Installment_Period__c: npe03__Installment_Period__c
+#         npsp__Day_of_Month__c: Day_of_Month__c
+#         npsp__InstallmentFrequency__c: InstallmentFrequency__c
+#         npsp__StartDate__c: StartDate__c
+#         npsp__PaymentMethod__c: PaymentMethod__c
+#         npsp__RecurringType__c: RecurringType__c
+#         npsp__Status__c: Status__c
+#     lookups:
+#         npe03__Contact__c:
+#             table: Contact
+# Opportunity:
+#     sf_object: Opportunity
+#     table: Opportunity
+#     fields:
+#         Name: Name
+#         Amount: Amount
+#         StageName: StageName
+#         CloseDate: CloseDate
+#         npe01__Do_Not_Automatically_Create_Payment__c: npe01__Do_Not_Automatically_Create_Payment__c
+#     lookups:
+#         AccountId:
+#             table: Account
+#         npsp__Primary_Contact__c:
+#             table: Contact
+#         npe03__Recurring_Donation__c:
+#             table: npe03__Recurring_Donation__c
+#         CampaignId:
+#             table: Campaign
+# OpportunityContactRole:
+#     sf_object: OpportunityContactRole
+#     table: OpportunityContactRole
+#     fields:
+#         Role: Role
+#         IsPrimary: IsPrimary
+#     lookups:
+#         ContactId:
+#             table: Contact
+#         OpportunityId:
+#             table: Opportunity
+# General_Accounting_Unit__c:
+#     sf_object: npsp__General_Accounting_Unit__c
+#     table: General_Accounting_Unit__c
+#     fields:
+#         Name: Name
+# Allocation__c:
+#     sf_object: npsp__Allocation__c
+#     table: Allocation__c
+#     fields:
+#         npsp__Percent__c: npsp__Percent__c
+#         npsp__Amount__c: npsp__Amount__c
+#     lookups:
+#         npsp__Opportunity__c:
+#             table: Opportunity
+#         npsp__General_Accounting_Unit__c:
+#             table: General_Accounting_Unit__c
+#         npsp__Recurring_Donation__c:
+#             table: npe03__Recurring_Donation__c
+# npe4__Relationship__c:
+#     sf_object: npe4__Relationship__c
+#     table: npe4__Relationship__c
+#     fields:
+#         npe4__Type__c: npe4__Type__c
+#     lookups:
+#         npe4__Contact__c:
+#             table: Contact
+#         npe4__RelatedContact__c:
+#             table: Contact
+# CampaignMember:
+#     sf_object: CampaignMember
+#     table: CampaignMember
+#     fields:
+#         Status: Status
+#     lookups:
+#         ContactId:
+#             table: Contact
+#         CampaignId:
+#             table: Campaign
