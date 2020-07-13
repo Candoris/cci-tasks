@@ -70,12 +70,12 @@ tasks:
         - Contact
         - Account
 
-    dx_install_historical_transactions_authorize:
-      description: Install Historical Transactions unmanaged package from CANDTECH Org
-      class_path: cumulusci.tasks.sfdx.SFDXOrgTask
-      options:
-        command: force:package:install
-        extra: -p 04tj0000001acCZ --noprompt --wait 300
+  dx_install_historical_transactions_authorize:
+    description: Install Historical Transactions unmanaged package from CANDTECH Org
+    class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+    options:
+      command: force:package:install
+      extra: -p 04tj0000001acCZ --noprompt --wait 300
 
 flows:
   import_test_data:
