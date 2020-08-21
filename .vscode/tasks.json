@@ -14,6 +14,12 @@
             "type": "shell",
             "command": "cci task run cci-tasks:set_default --org ${input:org} -o dir ${input:dir}",
             "problemMatcher": []
+        },
+        {
+          "label": "Reset Tracking",
+          "type": "shell",
+          "command": "cci flow run cci-tasks:tracking_reset --org ${input:org}",
+          "problemMatcher": []
         }
     ],
     "inputs": [

@@ -77,6 +77,20 @@ tasks:
       command: force:package:install
       extra: -p 04tj0000001acCZ --noprompt --wait 300
 
+  tracking_clear:
+    description: Resets the tracking status.
+    class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+    options:
+      command: "force:source:tracking:clear"
+      extra: "-p"
+
+  tracking_reset:
+    description: Resets the tracking status.
+    class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+    options:
+      command: "force:source:tracking:reset"
+      extra: "-p"
+
 flows:
   import_test_data:
     steps:
@@ -86,3 +100,10 @@ flows:
         task: generate_test_data
       3:
         task: test_data_dev_org
+
+  tracking_reset:
+    steps:
+      1:
+        task: tracking_clear
+      2:
+        task: tracking_reset
