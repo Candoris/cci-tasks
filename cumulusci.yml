@@ -91,6 +91,10 @@ tasks:
       command: "force:source:tracking:reset"
       extra: "-p"
 
+  custom_snowfakery_from_yaml:
+    description: Custom Snowfakery From Yaml
+    class_path: tasks.custom_snowfakery_from_yaml.CustomSnowfakeryFromYaml
+
 flows:
   import_test_data:
     steps:
