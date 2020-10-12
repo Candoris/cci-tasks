@@ -6,8 +6,7 @@ import yaml
 from cumulusci.tasks.bulkdata.generate_from_yaml import GenerateDataFromYaml
 from snowfakery.output_streams import SqlOutputStream
 from snowfakery.data_generator import generate, StoppingCriteria
-from snowfakery.generate_mapping_from_recipe import mapping_from_recipe_templates
-
+import snowfakery.generate_mapping_from_recipe
 '''
 The purpose of this custom generator is to remove the __ from "hidden" objects in the mapping.yml. This allows us to create dummy objects to manually set an Id for references in Snowfakery templates.
 
@@ -27,6 +26,22 @@ Example:
             min: 1
             max: 10
 '''
+
+'''
+I am afraid this is a bit of a hack. Objects starting with __ are inserted as dependencies by the data_generator_runtime. This might be unintended behavior, however, it allows us to insert a dummy object which has the Id of the corresponding normal table. For example, there can be an __Account object with a specified Id that resolves to the corresponding Id for the Account table. The following overridden _table_is_free removes the dummy from the dependencies list so that the dependency order is calculated properly.
+'''
+
+
+def custom_table_is_free(table_name, dependencies, sorted_tables):
+    tables_this_table_depends_upon = dependencies.get(table_name, {})
+    for dependency in sorted(tables_this_table_depends_upon):
+        if dependency.table_name_to in sorted_tables or dependency.table_name_to.startswith("__"):
+            tables_this_table_depends_upon.remove(dependency)
+
+    return len(tables_this_table_depends_upon) == 0
+
+
+snowfakery.generate_mapping_from_recipe._table_is_free = custom_table_is_free
 
 
 class CustomGenerateDataFromYaml(GenerateDataFromYaml):
@@ -68,7 +83,8 @@ class CustomGenerateDataFromYaml(GenerateDataFromYaml):
                     new_continuation_file.name, self.default_continuation_file_path()
                 )
 
-        mapping = mapping_from_recipe_templates(summary)
+        mapping = snowfakery.generate_mapping_from_recipe.mapping_from_recipe_templates(
+            summary)
         self.postProcessMapping(mapping)
 
         if self.generate_mapping_file:
