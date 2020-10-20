@@ -91,6 +91,10 @@ tasks:
       command: "force:source:tracking:reset"
       extra: "-p"
 
+  pull_custom_settings:
+    description: Pulls custom settings from org into orgCustomSettings.yml
+    class_path: tasks.pullCustomSettings.PullSettings
+
 flows:
   import_test_data:
     steps:
@@ -107,3 +111,10 @@ flows:
         task: tracking_clear
       2:
         task: tracking_reset
+        
+  push_custom_settings:
+        steps:
+            1:
+                task: load_custom_settings
+                options:
+                    settings_path: orgCustomSettings.yml
