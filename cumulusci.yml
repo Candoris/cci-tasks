@@ -95,6 +95,10 @@ tasks:
     description: Pulls custom settings from org into orgCustomSettings.yml
     class_path: tasks.pullCustomSettings.PullSettings
 
+  clean_profile_permissions:
+    description: Removes unwanted profile permissions
+    class_path: tasks.cleanProfilePermissions.CleanProfile
+
 flows:
   import_test_data:
     steps:
@@ -113,8 +117,8 @@ flows:
         task: tracking_reset
         
   push_custom_settings:
-        steps:
-            1:
-                task: load_custom_settings
-                options:
-                    settings_path: orgCustomSettings.yml
+    steps:
+      1:
+        task: load_custom_settings
+        options:
+          settings_path: orgCustomSettings.yml
