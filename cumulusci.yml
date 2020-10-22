@@ -99,6 +99,10 @@ tasks:
     description: Removes unwanted profile permissions
     class_path: tasks.cleanProfilePermissions.CleanProfile
 
+  comment_forceignore:
+    description: Comments or uncomments the line "**profile" in .forceignore
+    class_path: tasks.commentForceignore.CommentProfile
+
 flows:
   import_test_data:
     steps:
