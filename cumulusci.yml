@@ -10,6 +10,8 @@ sources:
   npsp:
     github: https://github.com/SalesforceFoundation/NPSP
     release: latest
+  trigger-handler-engine:
+    github: https://github.com/Candoris/trigger-handler-engine
 
 tasks:
   resolve_dependencies:
@@ -102,7 +104,7 @@ tasks:
   comment_forceignore:
     description: Comments or uncomments the line "**profile" in .forceignore
     class_path: tasks.commentForceignore.CommentProfile
-
+  
 flows:
   import_test_data:
     steps:
@@ -126,3 +128,6 @@ flows:
         task: load_custom_settings
         options:
           settings_path: orgCustomSettings.yml
+          
+  install_trigger_engine:
+    flow: trigger-handler-engine:deploy_unmanaged
