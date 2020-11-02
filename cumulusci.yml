@@ -10,8 +10,6 @@ sources:
   npsp:
     github: https://github.com/SalesforceFoundation/NPSP
     release: latest
-  trigger-handler-engine:
-    github: https://github.com/Candoris/trigger-handler-engine
 
 tasks:
   resolve_dependencies:
@@ -128,6 +126,3 @@ flows:
         task: load_custom_settings
         options:
           settings_path: orgCustomSettings.yml
-          
-  install_trigger_engine:
-    flow: trigger-handler-engine:deploy_unmanaged
