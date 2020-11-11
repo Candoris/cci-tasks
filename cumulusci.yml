@@ -1,3 +1,5 @@
+# This portion of the cumulusci.yml should be generated using cci project init command.
+
 minimum_cumulusci_version: "3.12.2"
 project:
   name: cci-tasks
@@ -11,17 +13,26 @@ sources:
     github: https://github.com/SalesforceFoundation/NPSP
     release: latest
 
+# Useful tasks and flows start here. All tasks and flows should have a group. The group is used to categorize tasks and flows when executing the commands:
+
+# cci task list
+# cci flow list
+
 tasks:
+  # Package Development
   resolve_dependencies:
     description: Transfers cci dependencies to sfdx-project.json
-    class_path: tasks.ResolveDependencies
+    class_path: tasks.package_development.ResolveDependencies
+    group: Package Development
 
   set_default:
     description: Changes the default directory. Pass in directory with -o
-    class_path: tasks.SetDefault
+    class_path: tasks.package_development.SetDefault
+    group: Package Development
 
+  # NPSP
   init_rollup_settings:
-    description: Initialize rollup settings, since the custom_settings_value_wait task requires the value to exist.
+    description: Initialize rollup settings, since the custom_settings_value_wait task requires the value to exist. Needed when using Enhanced Recurring Donations.
     class_path: cumulusci.tasks.apex.anon.AnonymousApexTask
     group: NPSP
     options:
@@ -30,9 +41,9 @@ tasks:
         upsert crlpSettings;
 
   npsp_custom_config:
-    description: Post install metadata for NNPSP
+    description: Post install metadata for NPSP
     class_path: cumulusci.tasks.salesforce.Deploy
-    group: Salesforce Metadata
+    group: NPSP
     options:
       path: unpackaged/npsp/custom_config
 
@@ -43,6 +54,7 @@ tasks:
     options:
       sql_path: datasets/dev_org/test_data.sql
 
+  # Test Data
   test_data_dev_org:
     description: Loads a test data set for most NPSP objects based on 100 Contacts that should fit into a scratch org or DE org.
     class_path: cumulusci.tasks.bulkdata.LoadData
@@ -70,16 +82,21 @@ tasks:
         - Contact
         - Account
 
+  # Common Packages
   dx_install_historical_transactions_authorize:
     description: Install Historical Transactions unmanaged package from CANDTECH Org
     class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+    group: Common Packages
     options:
       command: force:package:install
       extra: -p 04tj0000001acCZ --noprompt --wait 300
 
+  # Custom Development 
+  #   Almost every project should include all of these.
   tracking_clear:
     description: Resets the tracking status.
     class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+    group: Custom Development
     options:
       command: "force:source:tracking:clear"
       extra: "-p"
@@ -87,16 +104,37 @@ tasks:
   tracking_reset:
     description: Resets the tracking status.
     class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+    group: Custom Development
     options:
       command: "force:source:tracking:reset"
       extra: "-p"
 
+  pull_custom_settings:
+    description: Pulls custom settings from org into orgCustomSettings.yml
+    class_path: tasks.pullCustomSettings.PullSettings
+    group: Custom Development
+
+  clean_profile_permissions:
+    description: Removes unwanted profile permissions
+    class_path: tasks.cleanProfilePermissions.CleanProfile
+    group: Custom Development
+
+  comment_forceignore:
+    description: Comments or uncomments the line "**profile" in .forceignore
+    class_path: tasks.commentForceignore.CommentProfile
+    group: Custom Development
+
+  # Group Workarounds
+  #   The expectation is that these will not be needed forever, so if you use one of these, make sure it is still necessary.
   custom_snowfakery_from_yaml:
-    description: Custom Snowfakery From Yaml
+    description: Custom Snowfakery From Yaml. This allows for advanced relationships (reference by ID) with Snowfakery.
     class_path: tasks.custom_snowfakery_from_yaml.CustomSnowfakeryFromYaml
+    group: Workarounds
 
 flows:
+  # Test Data
   import_test_data:
+    group: Test Data
     steps:
       1:
         task: test_data_delete
@@ -105,9 +143,19 @@ flows:
       3:
         task: test_data_dev_org
 
+  # Custom Development
   tracking_reset:
+    group: Custom Development
     steps:
       1:
         task: tracking_clear
       2:
         task: tracking_reset
+
+  push_custom_settings:
+    group: Custom Development
+    steps:
+      1:
+        task: load_custom_settings
+        options:
+          settings_path: orgCustomSettings.yml

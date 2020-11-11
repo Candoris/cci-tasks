@@ -2,11 +2,6 @@
 
 The purpose of this repository is to hold a library of cci tasks and workflows.
 
-Potential future improvements:
-
-- Separate tasks into individual files as necessary when new tasks are added.
-- Tasks for creating unlocked packages & versions.
-
 ## Setup
 
 1. Add the following to your cumulusci.yml
@@ -18,6 +13,8 @@ sources:
 ```
 
 2. Copy tasks directory into into your target cci project
+
+You do not need to copy any tasks that are not used for a particular project.
 
 ## Executing tasks through vscode
 
