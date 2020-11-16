@@ -1,0 +1,275 @@
+minimum_cumulusci_version: "3.16.0"
+project:
+  name: Salesforce
+  package:
+    name: Salesforce
+    api_version: "49.0"
+  dependencies:
+    - github: "https://github.com/SalesforceFoundation/NPSP"
+    - github: "https://github.com/SalesforceFoundation/Volunteers-for-Salesforce"
+  git:
+  test:
+    name_match: "%Test"
+  source_format: sfdx
+
+sources:
+  npsp:
+    github: https://github.com/SalesforceFoundation/NPSP
+    tag: rel/3.178
+  v4s:
+    github: https://github.com/SalesforceFoundation/Volunteers-for-Salesforce
+    tag: rel/3.118
+  cci-tasks:
+    github: https://github.com/Candoris/cci-tasks
+  account-relationship:
+    github: https://github.com/Candoris/account-relationships-package
+
+tasks:
+  robot:
+    options:
+      suites: robot/Salesforce/tests
+      options:
+        outputdir: robot/Salesforce/results
+
+  robot_testdoc:
+    options:
+      path: robot/Salesforce/tests
+      output: robot/Salesforce/doc/Salesforce_tests.html
+
+  run_tests:
+    options:
+      required_org_code_coverage_percent: 75
+
+  dx_deploy:
+    description: Deploys from source
+    class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+    options:
+      command: "force:source:deploy"
+      extra: "-p force-app/main/default -l RunLocalTests"
+    group: Salesforce DX
+
+  dx_deploy_no_tests:
+    description: Deploys from source
+    class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+    options:
+      command: "force:source:deploy"
+      extra: "-p force-app/main/default"
+    group: Salesforce DX
+
+  tracking_clear:
+    description: Resets the tracking status.
+    class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+    options:
+      command: "force:source:tracking:clear"
+      extra: "-p"
+
+  tracking_reset:
+    description: Resets the tracking status.
+    class_path: cumulusci.tasks.sfdx.SFDXOrgTask
+    options:
+      command: "force:source:tracking:reset"
+      extra: "-p"
+
+  check_package_install:
+    description: Only completes after all packages in the list have been installed.
+    class_path: tasks.checkInstallProgress.CheckProgressList
+  
+  install_pardot:
+    description: Installed Pardot managed package.
+    class_path: tasks.installPackage.Install
+    options:
+      packageVersionId: "04t1W000000kpBN"
+  
+  install_asl:
+    description: Installed Accounting Subledger managed package.
+    class_path: tasks.installPackage.Install
+    options:
+      packageVersionId: "04t0b000001HyEUAA0"
+
+  install_maps:
+    description: Install Salesforce Maps.
+    class_path: tasks.installPackage.Install
+    options:
+      packageVersionId: "04t4P000002KlpaQAC"
+
+  install_chargent_base:
+    description: Installed Accounting Subledger managed package.
+    class_path: tasks.installPackage.Install
+    options:
+      packageVersionId: "04t3g000000HCkMAAW"
+
+  install_chargent_orders:
+    description: Installed Accounting Subledger managed package.
+    class_path: tasks.installPackage.Install
+    options:
+      packageVersionId: "04t3g000000gNWPAA2"
+
+  install_chargent_anywhere:
+    description: Installed Accounting Subledger managed package.
+    class_path: tasks.installPackage.Install
+    options:
+      packageVersionId: "04t1U000007g9RyQAI"
+      
+  clean_profile_permissions:
+    description: Removes unwanted profile permissions
+    class_path: tasks.cleanProfilePermissions.CleanProfile
+
+  comment_forceignore:
+    description: Comments or uncomments the line "**profile" in .forceignore
+    class_path: tasks.commentForceignore.CommentProfile
+  
+  pull_custom_settings:
+    description: Pulls custom settings from org into orgCustomSettings.yml
+    class_path: tasks.pullCustomSettings.PullSettings
+
+flows:
+  custom_dev_org:
+    steps:
+      1:
+        flow: install_packages
+      2:
+        task: npsp:deploy_dev_config_delete
+      3:
+        task: npsp:deploy_trial_config
+        options:
+          unmanaged: false
+      4:
+        task: cci-tasks:init_rollup_settings
+      5:
+        flow: npsp:enable_rd2_managed
+      6:
+        flow: v4s:customer_org
+      7:
+        task: npsp:update_admin_profile
+        options:
+          managed: true
+      8: 
+        task: npsp:deploy_reports
+        options:
+          unmanaged: false
+        ui_options:
+          name: NPSP Reports & Dashboards
+      9:
+        task: dx
+        options:
+          command: "force:mdapi:deploy"
+          extra: "-d ./unpackaged/scratchDestructiveChanges -w 10"
+      10:
+        task: dx
+        options:
+          command: "force:source:deploy"
+          extra: "-p force-app/main/default/contentassets"
+      11:
+        flow: account-relationship:deploy_unmanaged
+      12:
+        task: comment_forceignore
+        options:
+          comment_profile: true
+      13:
+        task: dx_push
+        options:
+          extra: "-f"
+      14:
+        task: comment_forceignore
+        options:
+          comment_profile: false
+      15:
+        flow: push_custom_settings
+      16:
+        task: snapshot_changes
+      17:
+        task: update_admin_profile
+
+  dev_org:
+    steps:
+      2:
+        flow: custom_dev_org
+
+  install_packages:
+    steps:
+      1:
+        task: install_pardot
+      2:
+        task: install_asl
+      3:
+        task: install_maps
+      4:
+        task: check_package_install
+      5:
+        task: install_chargent_base
+      6:
+        task: install_chargent_orders
+      7:
+        task: check_package_install
+      8:
+        task: install_chargent_anywhere
+      9:
+        task: check_package_install
+
+  dx_deploy:
+    steps:
+      1:
+        task: comment_forceignore
+        options:
+          comment_profile: true
+      2:
+        task: dx_deploy
+      3:
+        task: update_admin_profile
+
+  dx_deploy_no_tests:
+    steps:
+      1:
+        task: comment_forceignore
+        options:
+          comment_profile: true
+      2:
+        task: dx_deploy_no_tests
+      3:
+        task: update_admin_profile
+
+  tracking_reset:
+    steps:
+      1:
+        task: tracking_clear
+      2:
+        task: tracking_reset
+      3:
+        task: dx
+        options:
+          command: "force:source:status"
+
+  push_profile_changes:
+    steps:
+      1:
+        task: comment_forceignore
+        options:
+          comment_profile: true
+      2:
+        task: dx
+        options:
+          command: "force:source:deploy"
+          extra: "-p force-app/main/default/profiles"
+      3:
+        task: comment_forceignore
+        options:
+          comment_profile: false
+
+  push_custom_settings:
+    steps:
+      1:
+        task: load_custom_settings
+        options:
+          settings_path: aslCustomSettings.yml
+      3:
+        task: load_custom_settings
+        options:
+          settings_path: salesforceMapsCustomSettings.yml
+      4:
+        task: load_custom_settings
+        options:
+          settings_path: npspCustomSettings.yml
+      2:
+        task: load_custom_settings
+        options:
+          settings_path: navigatorsCustomSettings.yml
