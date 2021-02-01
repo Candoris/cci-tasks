@@ -91,7 +91,7 @@ tasks:
       command: force:package:install
       extra: -p 04tj0000001acCZ --noprompt --wait 300
 
-  # Custom Development 
+  # Custom Development
   #   Almost every project should include all of these.
   tracking_clear:
     description: Resets the tracking status.
@@ -120,8 +120,8 @@ tasks:
     group: Custom Development
 
   comment_forceignore:
-    description: Comments or uncomments the line "**profile" in .forceignore
-    class_path: tasks.commentForceignore.CommentProfile
+    description: Comments or uncomments the specified lines in .forceignore
+    class_path: tasks.commentForceignore.CommentForceIgnore
     group: Custom Development
 
   # Group Workarounds
